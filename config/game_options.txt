@@ -257,7 +257,7 @@ MAX_TICKETS_PER_ROLL 100
 
 ## RANDOM EVENTS ###
 ## Comment this out to disable random events during the round.
-ALLOW_RANDOM_EVENTS
+#ALLOW_RANDOM_EVENTS
 
 ## Multiplier for earliest start time of dangerous events.
 ## Set to 0 to make dangerous events avaliable from round start.
@@ -287,7 +287,7 @@ ALLOW_AI_MULTICAM
 ## AWAY MISSIONS ###
 
 ## Uncomment to load one of the missions from awaymissionconfig.txt at roundstart.
-#ROUNDSTART_AWAY
+ROUNDSTART_AWAY
 
 ## How long the delay is before the Away Mission gate opens. Default is half an hour.
 ## 600 is one minute.
@@ -427,8 +427,8 @@ ROUNDSTART_RACES human
 ## Races that are strictly worse than humans that could probably be turned on without balance concerns
 ROUNDSTART_RACES lizard
 #ROUNDSTART_RACES fly
-#ROUNDSTART_RACES moth
-ROUNDSTART_RACES plasmaman
+ROUNDSTART_RACES moth
+#ROUNDSTART_RACES plasmaman
 #ROUNDSTART_RACES shadow
 
 ## Races that are better than humans in some ways, but worse in others
@@ -467,7 +467,7 @@ OVERFLOW_CAP -1
 #STARLIGHT
 
 ## Uncomment to bring back old grey suit assistants instead of the now default rainbow colored assistants.
-#GREY_ASSISTANTS
+GREY_ASSISTANTS
 
 ## Midround Antag (aka Mulligan antag) config options ###
 
@@ -537,7 +537,7 @@ MICE_ROUNDSTART 10
 ROUNDSTART_TRAITS
 
 ## Uncomment to disable human moods.
-#DISABLE_HUMAN_MOOD
+DISABLE_HUMAN_MOOD
 
 ## Enable night shifts ##
 #ENABLE_NIGHT_SHIFTS
