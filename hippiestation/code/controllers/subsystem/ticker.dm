@@ -3,11 +3,12 @@
 
 /datum/controller/subsystem/ticker/Initialize(timeofday)
 	login_music_name = pop(splittext(login_music, "/")) // title name will be last element of the list
-	.=..()
+	return ..()
 
 /datum/controller/subsystem/ticker/Shutdown()
 	gather_newscaster() //called here so we ensure the log is created even upon admin reboot
 	save_admin_data()
+	update_everything_flag_in_db()
 	if(!round_end_sound)
 		round_end_sound = pick(\
 		'sound/roundend/newroundsexy.ogg',

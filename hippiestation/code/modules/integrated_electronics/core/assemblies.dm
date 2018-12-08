@@ -108,8 +108,7 @@
 	diag_hud_set_circuitcell()
 
 /obj/item/electronic_assembly/proc/handle_idle_power()
-	if(!battery)
-		return
+
 	// First we generate power.
 	for(var/obj/item/integrated_circuit/passive/power/P in assembly_components)
 		P.make_energy()
@@ -220,7 +219,7 @@
 						io = circuit_pins.get_pin_ref(IC_INPUT, i)
 						if(io)
 							words += "<b><a href='?src=[REF(circuit_pins)];act=wire;pin=[REF(io)]'>[io.display_pin_type()] [io.name]</a> \
-							[io.display_data(io.data)]</b><br>"
+							<a href='?src=[REF(circuit_pins)];act=data;pin=[REF(io)]'>[io.display_data(io.data)]</a></b><br>"
 							if(io.linked.len)
 								words += "<ul>"
 								for(var/k in io.linked)
@@ -241,7 +240,7 @@
 						io = circuit_pins.get_pin_ref(IC_OUTPUT, i)
 						if(io)
 							words += "<b><a href='?src=[REF(circuit_pins)];act=wire;pin=[REF(io)]'>[io.display_pin_type()] [io.name]</a> \
-							[io.display_data(io.data)]</b><br>"
+							<a href='?src=[REF(circuit_pins)];act=data;pin=[REF(io)]'>[io.display_data(io.data)]</a></b><br>"
 							if(io.linked.len)
 								words += "<ul>"
 								for(var/k in io.linked)
@@ -593,7 +592,7 @@
 				var/i = 0
 				//Check if there is another component with the same name and append a number for identification
 				for(var/s in input_selection)
-					var/obj/item/integrated_circuit/s_circuit = s
+					var/obj/item/integrated_circuit/s_circuit = input_selection[s] //The for-loop iterates the keys of the associative list.
 					if(s_circuit.name == input.name && s_circuit.displayed_name == input.displayed_name && s_circuit != input)
 						i++
 				var/disp_name= "[input.displayed_name] \[[input]\]"
