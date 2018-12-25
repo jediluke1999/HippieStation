@@ -139,11 +139,11 @@
 			Ban type
 			<br>
 			<label class='inputlabel radio'>Server
-			<input type='radio' id='server' name='radioban' value='server'[role == "Server" ? " checked" : ""][edit_id ? " onclick='return false' onkeydown='return false'" : ""]>
+			<input type='radio' id='server' name='radioban' value='server'[role == "Server" ? " checked" : ""][edit_id ? " disabled" : ""]>
 			<div class='inputbox'></div></label>
 			<br>
 			<label class='inputlabel radio'>Role
-			<input type='radio' id='role' name='radioban' value='role'[role == "Server" ? "" : " checked"][edit_id ? " onclick='return false' onkeydown='return false'" : ""]>
+			<input type='radio' id='role' name='radioban' value='role'[role == "Server" ? "" : " checked"][edit_id ? " disabled" : ""]>
 			<div class='inputbox'></div></label>
 		</div>
 		<div class='column right'>
@@ -462,7 +462,9 @@
 	message_admins("[kna] [msg][roles_to_ban[1] == "Server" ? "" : " Roles: [roles_to_ban.Join("\n")]"]")
 	if(applies_to_admins)
 		send2irc("BAN ALERT","[kn] [msg]")
-	create_message("note", player_ckey, null, reason, null, null, 0, 0, null, 0, severity)
+	var/note_reason = "Banned from [roles_to_ban[1] == "Server" ? "the server" : " Roles: [roles_to_ban.Join(", ")]"] [isnull(duration) ? "permanently" : "for [time_message]"] - [reason]"
+	create_message("note", player_ckey, admin_ckey, note_reason, null, null, 0, 0, null, 0, severity)
+	hippie_on_jobban(get_mob_by_key(player_ckey), roles_to_ban) // hippie -- apply stuff like catify on jobban
 	var/client/C = GLOB.directory[player_ckey]
 	var/datum/admin_help/AH = admin_ticket_log(player_ckey, msg)
 	var/appeal_url = "No ban appeal url set!"
@@ -566,7 +568,7 @@
 				output += "<br>Unbanned by <b>[unban_key]</b> on <b>[unban_datetime]</b> during round <b>#[unban_round_id]</b>."
 			output += "</div><div class='container'><div class='reason'>[reason]</div><div class='edit'>"
 			if(!expired && !unban_datetime)
-				output += "<a href='?_src_=holder;[HrefToken()];editbanid=[ban_id];editbankey=[player_key];editbanip=[player_ip];editbancid=[player_cid];editbanrole=[role];editbanduration=[duration];editbanadmins=[applies_to_admins];editbanreason=[reason];editbanpage=[page];editbanadminkey=[admin_key]'>Edit</a><br>[unban_href]"
+				output += "<a href='?_src_=holder;[HrefToken()];editbanid=[ban_id];editbankey=[player_key];editbanip=[player_ip];editbancid=[player_cid];editbanrole=[role];editbanduration=[duration];editbanadmins=[applies_to_admins];editbanreason=[url_encode(reason)];editbanpage=[page];editbanadminkey=[admin_key]'>Edit</a><br>[unban_href]"
 			if(edits)
 				output += "<br><a href='?_src_=holder;[HrefToken()];unbanlog=[ban_id]'>Edit log</a>"
 			output += "</div></div></div>"

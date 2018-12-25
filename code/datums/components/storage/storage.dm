@@ -96,6 +96,7 @@
 	RegisterSignal(parent, COMSIG_ITEM_PICKUP, .proc/signal_on_pickup)
 
 	RegisterSignal(parent, COMSIG_MOVABLE_POST_THROW, .proc/close_all)
+	RegisterSignal(parent, COMSIG_MOVABLE_MOVED, .proc/on_move)
 
 	RegisterSignal(parent, COMSIG_CLICK_ALT, .proc/on_alt_click)
 	RegisterSignal(parent, COMSIG_MOUSEDROP_ONTO, .proc/mousedrop_onto)
@@ -154,6 +155,12 @@
 	for(var/i in master.slaves)
 		var/datum/component/storage/slave = i
 		next += slave.parent
+
+/datum/component/storage/proc/on_move()
+	var/atom/A = parent
+	for(var/mob/living/L in can_see_contents())
+		if(!L.CanReach(A))
+			hide_from(L)
 
 /datum/component/storage/proc/attack_self(datum/source, mob/M)
 	if(locked)
@@ -286,10 +293,10 @@
 	for(var/obj/item/I in real_location.contents)
 		if(QDELETED(I))
 			continue
-		if(!.[I.type])
-			.[I.type] = new /datum/numbered_display(I, 1)
+		if(!.["[I.type]-[I.name]"])
+			.["[I.type]-[I.name]"] = new /datum/numbered_display(I, 1)
 		else
-			var/datum/numbered_display/ND = .[I.type]
+			var/datum/numbered_display/ND = .["[I.type]-[I.name]"]
 			ND.number++
 
 //This proc determines the size of the inventory to be displayed. Please touch it only if you know what you're doing.
