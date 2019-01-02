@@ -18,7 +18,7 @@
 	var/obj/item/disk/data/diskette //Incompatible format to genetics machine
 	//select which parts of the diskette to load
 	var/include_se = FALSE //mutations
-	var/include_ui = FALSE //appearance 
+	var/include_ui = FALSE //appearance
 	var/include_ue = FALSE //blood type, UE, and name
 
 	var/loading = FALSE // Nice loading text
@@ -245,6 +245,13 @@
 
 				dat += "<b>Unique Identifier:</b><br /><span class='highlight'>[active_record.fields["UI"]]</span><br>"
 				dat += "<b>Structural Enzymes:</b><br /><span class='highlight'>"
+				for(var/key in active_record.fields["SE"])
+					if(key != RACEMUT)
+						var/val = active_record.fields["SE"][key]
+						var/alias = GLOB.all_mutations[key].alias
+						dat +="[alias]: [val]<br />"
+
+				dat += "</span><br />"
 
 				if(diskette && diskette.fields)
 					dat += "<div class='block'>"
@@ -488,14 +495,17 @@
 	var/mob/living/mob_occupant = get_mob_or_brainmob(occupant)
 	var/datum/dna/dna
 	var/datum/bank_account/has_bank_account
+
+	// Do not use unless you know what they are.
+	var/mob/living/carbon/C = mob_occupant
+	var/mob/living/brain/B = mob_occupant
+
 	if(ishuman(mob_occupant))
-		var/mob/living/carbon/C = mob_occupant
 		dna = C.has_dna()
 		var/obj/item/card/id/I = C.get_idcard(TRUE)
 		if(I)
 			has_bank_account = I.registered_account
 	if(isbrain(mob_occupant))
-		var/mob/living/brain/B = mob_occupant
 		dna = B.stored_dna
 
 	if(!istype(dna))
@@ -506,8 +516,12 @@
 		scantemp = "<font class='bad'>Subject's brain is not responding to scanning stimuli.</font>"
 		playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, 0)
 		return
-	if((mob_occupant.has_trait(TRAIT_NOCLONE)) && (scanner.scan_level < 2))
-		scantemp = "<font class='bad'>Subject no longer contains the fundamental materials required to create a living clone.</font>"
+	if((mob_occupant.has_trait(TRAIT_HUSK)) && (src.scanner.scan_level < 2))
+		scantemp = "<font class='bad'>Subject's body is too damaged to scan properly.</font>"
+		playsound(src, 'sound/machines/terminal_alert.ogg', 50, 0)
+		return
+	if(mob_occupant.has_trait(TRAIT_BADDNA))
+		scantemp = "<font class='bad'>Subject's DNA is damaged beyond any hope of recovery.</font>"
 		playsound(src, 'sound/machines/terminal_alert.ogg', 50, 0)
 		return
 	if (isnull(mob_occupant.mind))
@@ -534,7 +548,7 @@
 	R.fields["id"] = copytext(md5(mob_occupant.real_name), 2, 6)
 	R.fields["UE"] = dna.unique_enzymes
 	R.fields["UI"] = dna.uni_identity
-	R.fields["SE"] = dna.struc_enzymes
+	R.fields["SE"] = dna.mutation_index
 	R.fields["blood_type"] = dna.blood_type
 	R.fields["features"] = dna.features
 	R.fields["factions"] = mob_occupant.faction
