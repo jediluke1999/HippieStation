@@ -36,7 +36,9 @@
 
 #define STATUS_EFFECT_GOOD_MUSIC /datum/status_effect/good_music
 
-#define STATUS_EFFECT_CREEP /datum/status_effect/creep //you feel fuckin great around your obsession
+#define STATUS_EFFECT_REGENERATIVE_CORE /datum/status_effect/regenerative_core
+
+#define STATUS_EFFECT_ANTIMAGIC /datum/status_effect/antimagic //grants antimagic (and reapplies if lost) for the duration
 
 /////////////
 // DEBUFFS //
@@ -66,6 +68,8 @@
 #define MAX_MANIA_SEVERITY 100 //how high the mania severity can go
 #define MANIA_DAMAGE_TO_CONVERT 90 //how much damage is required before it'll convert affected targets
 
+#define STATUS_EFFECT_CHOKINGSTRAND /datum/status_effect/strandling //Choking Strand
+
 #define STATUS_EFFECT_HISWRATH /datum/status_effect/his_wrath //His Wrath.
 
 #define STATUS_EFFECT_SUMMONEDGHOST /datum/status_effect/cultghost //is a cult ghost and can't use manifest runes
@@ -75,6 +79,7 @@
 #define STATUS_EFFECT_SAWBLEED /datum/status_effect/saw_bleed //if the bleed builds up enough, takes a ton of damage
 
 #define STATUS_EFFECT_NECROPOLIS_CURSE /datum/status_effect/necropolis_curse
+#define STATUS_EFFECT_HIVEMIND_CURSE /datum/status_effect/necropolis_curse/hivemind
 #define CURSE_BLINDING	1 //makes the edges of the target's screen obscured
 #define CURSE_SPAWNING	2 //spawns creatures that attack the target only
 #define CURSE_WASTING	4 //causes gradual damage
@@ -85,6 +90,14 @@
 #define STATUS_EFFECT_ICHORIAL_STAIN /datum/status_effect/ichorial_stain //Prevents a servant from being revived by vitality matrices for one minute.
 
 #define STATUS_EFFECT_GONBOLAPACIFY /datum/status_effect/gonbolaPacify //Gives the user gondola traits while the gonbola is attached to them.
+
+#define STATUS_EFFECT_SPASMS /datum/status_effect/spasms //causes random muscle spasms
+
+#define STATUS_EFFECT_DNA_MELT /datum/status_effect/dna_melt //usually does something horrible to you when you hit 100 genetic instability
+
+#define STATUS_EFFECT_GO_AWAY /datum/status_effect/go_away //makes you launch through walls in a single direction for a while
+
+#define STATUS_EFFECT_STASIS /datum/status_effect/incapacitating/stasis //Halts biological functions like bleeding, chemical processing, blood regeneration, walking, etc
 
 /////////////
 // NEUTRAL //
@@ -98,9 +111,21 @@
 
 #define STATUS_EFFECT_INLOVE /datum/status_effect/in_love //Displays you as being in love with someone else, and makes hearts appear around them.
 
+#define STATUS_EFFECT_BUGGED /datum/status_effect/bugged //Lets other mobs listen in on what it hears
+
+#define STATUS_EFFECT_HIVE_TRACKER /datum/status_effect/hive_track
+
+#define STATUS_EFFECT_HIVE_RADAR /datum/status_effect/agent_pinpointer/hivemind
+
+#define STATUS_EFFECT_BOUNTY /datum/status_effect/bounty //rewards the person who added this to the target with refreshed spells and a fair heal
+
 /////////////
 //  SLIME  //
 /////////////
 
 #define STATUS_EFFECT_RAINBOWPROTECTION /datum/status_effect/rainbow_protection //Invulnerable and pacifistic
 #define STATUS_EFFECT_SLIMESKIN /datum/status_effect/slimeskin //Increased armor
+
+// Stasis helpers
+
+#define IS_IN_STASIS(mob) (mob.has_status_effect(STATUS_EFFECT_STASIS))

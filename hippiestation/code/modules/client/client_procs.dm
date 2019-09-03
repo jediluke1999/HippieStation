@@ -1,6 +1,12 @@
 /client/New()
 	. = ..()
 	mentor_datum_set()
+	if(CONFIG_GET(string/ipstack_api_key))
+		country = SSipstack.check_ip(address)
+		if(country == "???")
+			message_admins("<span class='adminnotice'>GeoIP for [key_name_admin(src)] was invalid!</span>")
+		else if(country == "Brazil")
+			message_admins("<span class='adminnotice'>[key_name_admin(src)] is a Brazilian!</span>")
 
 /client/proc/hippie_client_procs(href_list)
 	if(href_list["mentor_msg"])
@@ -47,22 +53,24 @@
 	if(input)
 		var/datum/tts/T = new /datum/tts()
 		T.say(src, input, is_global=TRUE)
-		
+
 		to_chat(world, "<span class='boldannounce'>An admin used Text-to-Speech: [input]</span>")
 		log_admin("[key_name(src)] used Text-to-Speech: [input]")
 		message_admins("[key_name_admin(src)] used Text-to-Speech: [input]")
 
 		SSblackbox.record_feedback("tally", "admin_verb", 1, "Play TTS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/start_tts_engine()
-	set category = "Debug"
-	set name = "Start TTS Engine"
-
-	if (!check_rights(R_DEBUG))
-		return
-	if (!CONFIG_GET(flag/enable_tts))
-		to_chat(usr, "<span='warning'>Text-to-Speech is not enabled!</span>")
-		return
-
-	if (SStts)
-		SStts.start_engine()
+/client/proc/add_ooc_icons()
+	var/icons = ""
+	if(holder)
+		if(!holder.fakekey)
+			if(check_rights_for(src, R_ADMIN))
+				icons += "[icon2html('hippiestation/icons/ooc_icons/banhammer.dmi', world)]"
+	if(is_mentor())
+		if(!holder)
+			icons += "[icon2html('hippiestation/icons/ooc_icons/brain.dmi', world)]"
+	if(is_donator)
+		icons += "[icon2html('hippiestation/icons/ooc_icons/gold_coin.dmi', world)]"
+	if(country && (country in icon_states('hippiestation/icons/ooc_icons/countries.dmi')))
+		icons += "[icon2html('hippiestation/icons/ooc_icons/countries.dmi', world, country)]"
+	return icons

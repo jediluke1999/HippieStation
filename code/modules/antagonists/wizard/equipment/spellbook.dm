@@ -380,13 +380,14 @@
 	name = "Guardian Deck"
 	desc = "A deck of guardian tarot cards, capable of binding a personal guardian to your body. There are multiple types of guardian available, but all of them will transfer some amount of damage to you. \
 	It would be wise to avoid buying these with anything capable of causing you to swap bodies with others."
-	item_path = /obj/item/guardiancreator/choose/wizard
+	item_path = /obj/item/guardiancreator/wizard
 	category = "Assistance"
 
+/* hippie start -- holopara rework
 /datum/spellbook_entry/item/guardian/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
 	. = ..()
 	if(.)
-		new /obj/item/paper/guides/antag/guardian/wizard(get_turf(user))
+		new /obj/item/paper/guides/antag/guardian/wizard(get_turf(user))*/// hippie end
 
 /datum/spellbook_entry/item/bloodbottle
 	name = "Bottle of Blood"
@@ -571,11 +572,11 @@
 	var/list/categories = list()
 
 /obj/item/spellbook/examine(mob/user)
-	..()
+	. = ..()
 	if(owner)
-		to_chat(user, "There is a small signature on the front cover: \"[owner]\".")
+		. += {"There is a small signature on the front cover: "[owner]"."}
 	else
-		to_chat(user, "It appears to have no author.")
+		. += "It appears to have no author."
 
 /obj/item/spellbook/Initialize()
 	. = ..()
@@ -730,6 +731,7 @@
 					if(E.limit)
 						E.limit--
 					uses -= E.cost
+					bought_things[E.type] = bought_things[E.type] ? bought_things[E.type] + 1 : 1 // hippie -- badmin gauntlet stuff
 		else if(href_list["refund"])
 			E = entries[text2num(href_list["refund"])]
 			if(E && E.refundable)
@@ -738,6 +740,7 @@
 					if(!isnull(E.limit))
 						E.limit += result
 					uses += result
+					bought_things[E.type] = bought_things[E.type] ? bought_things[E.type] - max(result / E.cost, E.cost) : 0 // hippie -- badmin gauntlet stuff
 		else if(href_list["page"])
 			tab = sanitize(href_list["page"])
 	attack_self(H)

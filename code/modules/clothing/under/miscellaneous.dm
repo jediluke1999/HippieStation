@@ -392,7 +392,10 @@
 
 /obj/item/clothing/under/kilt/highlander
 	desc = "You're the only one worthy of this kilt."
-	item_flags = NODROP
+
+/obj/item/clothing/under/kilt/highlander/Initialize()
+	. = ..()
+	ADD_TRAIT(src, TRAIT_NODROP, HIGHLANDER)
 
 /obj/item/clothing/under/sexymime
 	name = "sexy mime outfit"
@@ -637,9 +640,8 @@
 
 
 /obj/item/clothing/under/plasmaman/examine(mob/user)
-	..()
-	to_chat(user, "<span class='notice'>There are [extinguishes_left] extinguisher charges left in this suit.</span>")
-
+	. = ..()
+	. += "<span class='notice'>There are [extinguishes_left] extinguisher charges left in this suit.</span>"
 
 /obj/item/clothing/under/plasmaman/proc/Extinguish(mob/living/carbon/human/H)
 	if(!istype(H))

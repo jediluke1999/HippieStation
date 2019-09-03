@@ -23,12 +23,12 @@
 	throwforce = 0
 	throw_speed = 3
 	throw_range = 7
-	grind_results = list("lye" = 10)
+	grind_results = list(/datum/reagent/lye = 10)
 	var/cleanspeed = 35 //slower than mop
 	force_string = "robust... against germs"
 	var/uses = 100
 
-/obj/item/soap/Initialize()
+/obj/item/soap/ComponentInitialize()
 	. = ..()
 	AddComponent(/datum/component/slippery, 80)
 
@@ -39,21 +39,21 @@
 	if(uses != max_uses)
 		var/percentage_left = uses / max_uses
 		switch(percentage_left)
-			if(0 to 14)
+			if(0 to 0.15)
 				msg = "There's just a tiny bit left of what it used to be, you're not sure it'll last much longer."
-			if(15 to 29)
+			if(0.15 to 0.30)
 				msg = "It's dissolved quite a bit, but there's still some life to it."
-			if(30 to 49)
+			if(0.30 to 0.50)
 				msg = "It's past its prime, but it's definitely still good."
-			if(50 to 74)
+			if(0.50 to 0.75)
 				msg = "It's started to get a little smaller than it used to be, but it'll definitely still last for a while."
 			else
 				msg = "It's seen some light use, but it's still pretty fresh."
-	to_chat(user, "<span class='notice'>[msg]</span>")
+	. += "<span class='notice'>[msg]</span>"
 
 /obj/item/soap/nanotrasen
 	desc = "A heavy duty bar of Nanotrasen brand soap. Smells of plasma."
-	grind_results = list("plasma" = 10, "lye" = 10)
+	grind_results = list(/datum/reagent/toxin/plasma = 10, /datum/reagent/lye = 10)
 	icon_state = "soapnt"
 	cleanspeed = 28 //janitor gets this
 	uses = 300
@@ -93,6 +93,19 @@
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
 	if(user.client && ((target in user.client.screen) && !user.is_holding(target)))
 		to_chat(user, "<span class='warning'>You need to take that [target.name] off before cleaning it!</span>")
+	// hippie start -- gangmageddon stuff
+	if(istype(target, /obj/effect/decal/cleanable/crayon/gang) && (user.mind && user.mind.has_antag_datum(/datum/antagonist/vigilante)))
+		var/obj/item/gangtool/hell_march/vigilante/V =  locate(/obj/item/gangtool/hell_march/vigilante) in user.contents
+		var/obj/effect/decal/cleanable/crayon/gang/tag = target
+		user.visible_message("[user] begins to scrub \the [tag.name] out with [src].", "<span class='warning'>You begin to scrub \the [tag.name] out with [src]...</span>")
+		if(do_after(user, src.cleanspeed, target = target))
+			to_chat(user, "<span class='notice'>You scrub \the [tag.name] out.</span>")
+			if(V)
+				var/area/territory = get_area(tag)
+				V.tags |= territory
+				to_chat(user, "<span class='notice'><b>\The [territory] is no longer under gang control. Keep this area clean for additional influence.</b></span>")
+			decreaseUses(user)
+	// hippie end
 	else if(istype(target, /obj/effect/decal/cleanable))
 		user.visible_message("[user] begins to scrub \the [target.name] out with [src].", "<span class='warning'>You begin to scrub \the [target.name] out with [src]...</span>")
 		if(do_after(user, src.cleanspeed, target = target))
@@ -147,6 +160,7 @@
 	throwforce = 0
 	hitsound = null //To prevent tap.ogg playing, as the item lacks of force
 	w_class = WEIGHT_CLASS_TINY
+	slot_flags = ITEM_SLOT_BACK|ITEM_SLOT_BELT
 	throw_speed = 3
 	throw_range = 7
 	attack_verb = list("HONKED")
@@ -207,4 +221,4 @@
 	name = "Canned Laughter"
 	desc = "Just looking at this makes you want to giggle."
 	icon_state = "laughter"
-	list_reagents = list("laughter" = 50)
+	list_reagents = list(/datum/reagent/consumable/laughter = 50)

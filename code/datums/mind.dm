@@ -64,6 +64,8 @@
 
 	var/force_escaped = FALSE  // Set by Into The Sunset command of the shuttle manipulator
 
+	var/list/learned_recipes //List of learned recipe TYPES.
+
 /datum/mind/New(var/key)
 	src.key = key
 	soulOwner = src
@@ -72,11 +74,7 @@
 /datum/mind/Destroy()
 	SSticker.minds -= src
 	if(islist(antag_datums))
-		for(var/i in antag_datums)
-			var/datum/antagonist/antag_datum = i
-			if(antag_datum.delete_on_mind_deletion)
-				qdel(i)
-		antag_datums = null
+		QDEL_LIST(antag_datums)
 	return ..()
 
 /datum/mind/proc/get_language_holder()
@@ -128,6 +126,9 @@
 	last_death = world.time
 
 /datum/mind/proc/store_memory(new_text)
+	var/newlength = length(memory) + length(new_text)
+	if (newlength > MAX_MESSAGE_LEN * 100)
+		memory = copytext(memory, -newlength-MAX_MESSAGE_LEN * 100)
 	memory += "[new_text]<BR>"
 
 /datum/mind/proc/wipe_memory()
@@ -159,6 +160,7 @@
 	if(antag_team)
 		antag_team.add_member(src)
 	A.on_gain()
+	log_game("[key_name(src)] has gained antag datum [A.name]([A.type])")
 	return A
 
 /datum/mind/proc/remove_antag_datum(datum_type)
@@ -269,6 +271,17 @@
 				traitor_mob.put_in_hands(inowhaveapen) // I hope you don't have arms and your traitor pen gets stolen for all this trouble you've caused.
 			P = inowhaveapen
 
+	var/obj/item/clothing/gloves/syndielad/SL // hippie -- syndielad
+	if(traitor_mob.client.prefs.uplink_spawn_loc == UPLINK_SYNDIELAD)
+		var/obj/item/clothing/gloves/syndielad/newSL
+		if(istype(traitor_mob.back,/obj/item/storage))
+			newSL = new /obj/item/clothing/gloves/syndielad/(traitor_mob.back)
+			SL = newSL
+		else
+			newSL = new /obj/item/clothing/gloves/syndielad/(traitor_mob.loc)
+			traitor_mob.put_in_hands(newSL)
+			SL = newSL // hippie end
+
 	var/obj/item/uplink_loc
 
 	if(traitor_mob.client && traitor_mob.client.prefs)
@@ -291,6 +304,8 @@
 					uplink_loc = PDA
 				if(!uplink_loc)
 					uplink_loc = R
+			if(UPLINK_SYNDIELAD) // hippie -- syndielad again
+				uplink_loc = SL // hippie end
 
 	if (!uplink_loc)
 		if(!silent)
@@ -309,6 +324,8 @@
 				to_chat(traitor_mob, "[employer] has cunningly disguised a Syndicate Uplink as your [PDA.name]. Simply enter the code \"[U.unlock_code]\" into the ringtone select to unlock its hidden features.")
 			else if(uplink_loc == P)
 				to_chat(traitor_mob, "[employer] has cunningly disguised a Syndicate Uplink as your [P.name]. Simply twist the top of the pen [english_list(U.unlock_code)] from its starting position to unlock its hidden features.")
+			else if(uplink_loc == SL) // hippie -- okay what do you think it is smartass
+				to_chat(traitor_mob, "[employer] has gifted you a Syndie-Lad portable arm-mounted computer. Simply turn it on to use its features and your Syndicate Uplink.") // hippie end
 
 		if(uplink_owner)
 			uplink_owner.antag_memory += U.unlock_note + "<br>"

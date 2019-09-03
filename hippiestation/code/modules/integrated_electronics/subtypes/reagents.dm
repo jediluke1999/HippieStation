@@ -418,7 +418,7 @@
 		if(1)
 			var/cont[0]
 			for(var/datum/reagent/RE in reagents.reagent_list)
-				cont += RE.id
+				cont += RE.type
 			set_pin_data(IC_OUTPUT, 3, cont)
 			push_data()
 		if(2)
@@ -486,11 +486,11 @@
 
 	for(var/datum/reagent/G in source.reagents.reagent_list)
 		if(!direction_mode)
-			if(G.id in demand)
-				source.reagents.trans_id_to(target, G.id, transfer_amount)
+			if(G.type in demand)
+				source.reagents.trans_id_to(target, G.type, transfer_amount)
 		else
-			if(!(G.id in demand))
-				source.reagents.trans_id_to(target, G.id, transfer_amount)
+			if(!(G.type in demand))
+				source.reagents.trans_id_to(target, G.type, transfer_amount)
 	activate_pin(2)
 	push_data()
 
@@ -610,7 +610,8 @@
 	activators = list(
 		"spray" = IC_PINTYPE_PULSE_IN,
 		"on sprayed" = IC_PINTYPE_PULSE_OUT,
-		"on fail" = IC_PINTYPE_PULSE_OUT
+		"on fail" = IC_PINTYPE_PULSE_OUT,
+		"push ref" = IC_PINTYPE_PULSE_IN
 		)
 	spawn_flags = IC_SPAWN_DEFAULT|IC_SPAWN_RESEARCH
 	power_draw_per_use = 15
@@ -711,7 +712,8 @@
 	activators = list(
 		"drain" = IC_PINTYPE_PULSE_IN,
 		"on drained" = IC_PINTYPE_PULSE_OUT,
-		"on fail" = IC_PINTYPE_PULSE_OUT
+		"on fail" = IC_PINTYPE_PULSE_OUT,
+		"push ref" = IC_PINTYPE_PULSE_IN
 		)
 	spawn_flags = IC_SPAWN_DEFAULT|IC_SPAWN_RESEARCH
 	power_draw_per_use = 15

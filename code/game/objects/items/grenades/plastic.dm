@@ -73,7 +73,11 @@
 			explosion(location, boom_sizes[1], boom_sizes[2], boom_sizes[3])
 	if(ismob(target))
 		var/mob/M = target
-		M.gib()
+		if(ishuman(M)) // hippie -- allows gibbing of human corpses, instagibbing with X4
+			if(M.stat || full_damage_on_mobs)
+				M.gib(1, 1, 1)
+		else // hippie end
+			M.gib()
 	qdel(src)
 
 //assembly stuff
@@ -116,7 +120,7 @@
 		message_admins("[ADMIN_LOOKUPFLW(user)] planted [name] on [target.name] at [ADMIN_VERBOSEJMP(target)] with [det_time] second fuse")
 		log_game("[key_name(user)] planted [name] on [target.name] at [AREACOORD(user)] with a [det_time] second fuse")
 
-		notify_ghosts("[user] has planted \a [src] on [target] with a [det_time] second fuse!", source = target, action = NOTIFY_ORBIT)
+		notify_ghosts("[user] has planted \a [src] on [target] with a [det_time] second fuse!", source = target, action = NOTIFY_ORBIT, flashwindow = FALSE, header = "Explosive Planted")
 
 		moveToNullspace()	//Yep
 
@@ -125,13 +129,12 @@
 			I.throw_speed = max(1, (I.throw_speed - 3))
 			I.throw_range = max(1, (I.throw_range - 3))
 			I.embedding = I.embedding.setRating(embed_chance = 0)
+		else if(istype(AM, /mob/living))
+			plastic_overlay.layer = FLOAT_LAYER
 
-		target.add_overlay(plastic_overlay, TRUE)
-		if(!nadeassembly)
-			to_chat(user, "<span class='notice'>You plant the bomb. Timer counting down from [det_time].</span>")
-			addtimer(CALLBACK(src, .proc/prime), det_time*10)
-		else
-			qdel(src)	//How?
+		target.add_overlay(plastic_overlay)
+		to_chat(user, "<span class='notice'>You plant the bomb. Timer counting down from [det_time].</span>")
+		addtimer(CALLBACK(src, .proc/prime), det_time*10)
 
 /obj/item/grenade/plastic/proc/shout_syndicate_crap(mob/M)
 	if(!M)
@@ -205,7 +208,7 @@
 		wires.interact(user)
 	else
 		return ..()
-
+/* hippie -- did nothing but break shit
 /obj/item/grenade/plastic/c4/prime()
 	if(QDELETED(src))
 		return
@@ -221,7 +224,7 @@
 	if(location)
 		explosion(location,0,0,3)
 	qdel(src)
-
+*/
 /obj/item/grenade/plastic/c4/attack(mob/M, mob/user, def_zone)
 	return
 
