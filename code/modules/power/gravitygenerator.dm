@@ -79,6 +79,8 @@ GLOBAL_LIST_EMPTY(gravity_generators) // We will keep track of this by adding ne
 	return main_part.attackby(I, user)
 
 /obj/machinery/gravity_generator/part/get_status()
+	if(QDELETED(main_part)) // hippie start -- fix weird runtime
+		return "off" // hippie end
 	return main_part.get_status()
 
 /obj/machinery/gravity_generator/part/attack_hand(mob/user)
@@ -258,7 +260,7 @@ GLOBAL_LIST_EMPTY(gravity_generators) // We will keep track of this by adding ne
 // Power and Icon States
 
 /obj/machinery/gravity_generator/main/power_change()
-	..()
+	. = ..()
 	investigate_log("has [stat & NOPOWER ? "lost" : "regained"] power.", INVESTIGATE_GRAVITY)
 	set_power()
 

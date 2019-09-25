@@ -1,4 +1,4 @@
-// DM Environment file for tgstation.dme.
+// DM Environment file for hippiestation.dme.
 // All manual changes should be made outside the BEGIN_ and END_ blocks.
 // New source code should be placed in .dm files: choose File/New --> Code File.
 // BEGIN_INTERNALS
@@ -91,6 +91,7 @@
 #include "code\__DEFINES\shuttles.dm"
 #include "code\__DEFINES\sight.dm"
 #include "code\__DEFINES\sound.dm"
+#include "code\__DEFINES\spaceman_dmm.dm"
 #include "code\__DEFINES\stat.dm"
 #include "code\__DEFINES\stat_tracking.dm"
 #include "code\__DEFINES\status_effects.dm"
@@ -2333,6 +2334,7 @@
 #include "code\modules\paperwork\pen.dm"
 #include "code\modules\paperwork\photocopier.dm"
 #include "code\modules\paperwork\stamps.dm"
+#include "code\modules\paperwork\ticketmachine.dm"
 #include "code\modules\photography\_pictures.dm"
 #include "code\modules\photography\camera\camera.dm"
 #include "code\modules\photography\camera\camera_image_capturing.dm"
@@ -2662,6 +2664,7 @@
 #include "code\modules\shuttle\ripple.dm"
 #include "code\modules\shuttle\shuttle.dm"
 #include "code\modules\shuttle\shuttle_rotate.dm"
+#include "code\modules\shuttle\spaceship_navigation_beacon.dm"
 #include "code\modules\shuttle\special.dm"
 #include "code\modules\shuttle\supply.dm"
 #include "code\modules\shuttle\syndicate.dm"
@@ -3139,7 +3142,9 @@
 #include "hippiestation\code\modules\admin\verbs\spawnfloorcluwne.dm"
 #include "hippiestation\code\modules\admin\verbs\spawnhuman.dm"
 #include "hippiestation\code\modules\admin\verbs\testdummy.dm"
+#include "hippiestation\code\modules\antagonists\_common\antag_datum.dm"
 #include "hippiestation\code\modules\antagonists\_common\antag_spawner.dm"
+#include "hippiestation\code\modules\antagonists\_common\tips.dm"
 #include "hippiestation\code\modules\antagonists\abductor\abductor.dm"
 #include "hippiestation\code\modules\antagonists\brother\brother.dm"
 #include "hippiestation\code\modules\antagonists\changeling\horrorform.dm"
@@ -3162,6 +3167,7 @@
 #include "hippiestation\code\modules\antagonists\infiltrator\items\hardsuit.dm"
 #include "hippiestation\code\modules\antagonists\infiltrator\items\pinpointer.dm"
 #include "hippiestation\code\modules\antagonists\infiltrator\items\services.dm"
+#include "hippiestation\code\modules\antagonists\traitor\datum_traitor.dm"
 #include "hippiestation\code\modules\antagonists\traitor\equipment\Malf_Modules.dm"
 #include "hippiestation\code\modules\antagonists\wizard\equipment\spellbook.dm"
 #include "hippiestation\code\modules\antagonists\wizard\equipment\spellbook_darkness.dm"
@@ -3174,6 +3180,7 @@
 #include "hippiestation\code\modules\atmospherics\unary_devices\vent_scrubber.dm"
 #include "hippiestation\code\modules\awaymissions\corpse.dm"
 #include "hippiestation\code\modules\cargo\packs.dm"
+#include "hippiestation\code\modules\client\asset_cache.dm"
 #include "hippiestation\code\modules\client\client_colour.dm"
 #include "hippiestation\code\modules\client\client_defines.dm"
 #include "hippiestation\code\modules\client\client_procs.dm"
@@ -3533,6 +3540,7 @@
 #include "hippiestation\code\modules\research\designs\bluespace.dm"
 #include "hippiestation\code\modules\research\designs\electronics_designs.dm"
 #include "hippiestation\code\modules\research\designs\machine_designs.dm"
+#include "hippiestation\code\modules\research\designs\mecha_designs.dm"
 #include "hippiestation\code\modules\research\designs\medical_designs.dm"
 #include "hippiestation\code\modules\research\designs\nanite_designs.dm"
 #include "hippiestation\code\modules\research\designs\power_designs.dm"

@@ -40,7 +40,7 @@
 	starting_node = TRUE
 	display_name = "Basic Exosuit Equipment"
 	description = "Various tools fit for basic mech units"
-	design_ids = list("mech_drill", "mech_mscanner", "mech_extinguisher", "mech_cable_layer")
+	design_ids = list("mech_drill", "mech_mscanner", "mech_extinguisher")
 
 /datum/techweb_node/basic_tools
 	id = "basic_tools"
@@ -228,6 +228,15 @@
 	design_ids = list("bluespace_cell", "quadratic_capacitor")
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
 	export_price = 5000
+
+/datum/techweb_node/regulated_bluespace
+	id = "regulated_bluespace"
+	display_name = "Regulated Bluespace Research"
+	description = "Bluespace technology using stable and balanced procedures. Required by galactic convention for public use."
+	prereq_ids = list("base")
+	design_ids = list("spaceship_navigation_beacon")
+	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
+	export_price = 2500
 
 /datum/techweb_node/unregulated_bluespace
 	id = "unregulated_bluespace"
